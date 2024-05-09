@@ -13,11 +13,40 @@
     <link rel="stylesheet"    href="https://cdnjs.cloudflare.com/ajax/libs/picocss/1.5.7/pico.classless.min.css">
     <link rel="stylesheet"    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
     <link rel="stylesheet"    href="tailwind-mod.min.css">
-    <script                   src="tailwind-mod.min.js" defer></script>
   </head>
   <body>
-    <div class="absolute inset-0 grid place-items-center bg-blue-500">
-      <div class="px-8">
+    <div id="container" class="absolute inset-0 grid place-items-center"></div>
+
+    <script src="tailwind-mod.min.js"></script>
+    <script>
+      // easy way to render an element to reduce code
+      function elm(htmlOrOptions, container) {
+        let html, events, func;
+        
+        if (typeof htmlOrOptions === 'object') {
+          html = htmlOrOptions.html;
+          events = htmlOrOptions.events;
+          func = htmlOrOptions.func;
+          container = htmlOrOptions.container;
+        } else {
+          html = htmlOrOptions;
+        }
+        
+        const elm = document.createElement("div");
+        elm.innerHTML = html;
+        const element = elm.firstElementChild;
+        
+        if (events && func) {
+          events.split(' ').forEach(event => {
+            element.addEventListener(event, func);
+          });
+        }
+        
+        return container.appendChild(element);
+      }
+      
+      elm(`
+      <div class="p-8 shadow-2xl shadow-blue-500 rounded-lg">
         <h1 class="mt-0 mb-4 text-white">
           Pico CSS + Tailwind CSS
         </h1>
@@ -32,7 +61,7 @@
             view <i class="ml-1 fa-brands fa-github"></i>
           </a>
         </div>
-      </div>
-    </div>
+      </div>`, container);
+    </script>
   </body>
 </html>
